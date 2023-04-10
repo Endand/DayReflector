@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 
 const App = () => {
@@ -23,17 +24,23 @@ const App = () => {
     const milliseconds = String(currentDate.getMilliseconds()).padStart(3, "0"); // Pad milliseconds with leading zeros if needed
 
     const currentDateTime = `${month}/${day}/${year} ${hours}:${minutes}:${seconds}:${milliseconds}`;
-    setPages([...pages, currentDateTime]);
+    setPages([currentDateTime, ...pages]); // Add new page to the beginning of the pages array
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Render the pages */}
-      {pages.map((page, index) => (
-        <View key={index}>
-          <Text>{page.substring(0, 10)}</Text>
-        </View>
-      ))}
+      <ScrollView>
+        {/* Render the pages */}
+        {pages.map((page, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.pageBox}
+            onPress={() => alert(`Page clicked: ${page}`)}
+          >
+            <Text>{page.substring(0, 10)}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
       {/* Render the "Add Day" button */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddDay}>
         <Text style={styles.addButtonText}>+Day</Text>
@@ -61,6 +68,16 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "white",
     fontSize: 20,
+  },
+  pageBox: {
+    backgroundColor: "lightcyan",
+    padding: 16,
+    margin: 8,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1, // Add flex property to allow the boxes to expand and fill the ScrollView
+    alignSelf: "stretch", // Add alignSelf property to stretch the boxes horizontally
   },
 });
 
