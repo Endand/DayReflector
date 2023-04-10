@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, Button } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 
 const App = () => {
   const [pages, setPages] = useState([]);
@@ -20,7 +27,7 @@ const App = () => {
   };
 
   return (
-    <View>
+    <SafeAreaView style={styles.container}>
       {/* Render the pages */}
       {pages.map((page, index) => (
         <View key={index}>
@@ -28,9 +35,33 @@ const App = () => {
         </View>
       ))}
       {/* Render the "Add Day" button */}
-      <Button title="+Day" onPress={handleAddDay} />
-    </View>
+      <TouchableOpacity style={styles.addButton} onPress={handleAddDay}>
+        <Text style={styles.addButtonText}>+Day</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? 25 : 0, // Add paddingTop for Android devices
+  },
+  addButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "dodgerblue",
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "white",
+    fontSize: 20,
+  },
+});
 
 export default App;
