@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  Alert,
 } from "react-native";
 
 const App = () => {
@@ -27,6 +28,30 @@ const App = () => {
     setPages([currentDateTime, ...pages]); // Add new page to the beginning of the pages array
   };
 
+  const handlePageLongPress = (page) => {
+    Alert.alert(
+      "Delete Page",
+      `Are you sure you want to delete this page: ${page.substring(0, 10)}?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            // Remove the specific page from pages array
+            const updatedPages = pages.filter((p) => p !== page);
+            setPages(updatedPages);
+          },
+        },
+      ],
+      //enable cancel with back button on phone
+      { cancelable: true }
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -36,6 +61,7 @@ const App = () => {
             key={index}
             style={styles.pageBox}
             onPress={() => alert(`Page clicked: ${page}`)}
+            onLongPress={() => handlePageLongPress(page)}
           >
             <Text>{page.substring(0, 10)}</Text>
           </TouchableOpacity>
@@ -52,7 +78,8 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? 25 : 0, // Add paddingTop for Android devices
+    // Add paddingTop for Android devices since SafeAreaView only affects IOS
+    paddingTop: Platform.OS === "android" ? 25 : 0,
   },
   addButton: {
     position: "absolute",
